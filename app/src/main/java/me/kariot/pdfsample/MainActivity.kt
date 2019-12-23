@@ -19,7 +19,13 @@ import com.github.ybq.android.spinkit.SpinKitView
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-
+    /**
+     * This is sample project which loads pdf from url to webview, on successful loading a share button is enabled.
+     *
+     * On pressing the button the file is downloaded to the device and successful login and share pop up is shown
+     *
+     * have a PDF URL -> Loads in to webview ->Loads succesfully -> enbles download & share button -> on click downloads and opens share intent
+     * */
     private lateinit var webview: WebView
     private lateinit var loader: SpinKitView
     var reportLoadError = false
@@ -42,6 +48,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /*
+    * Broadcast receiver which handles result of file download
+    *
+    * */
     private fun initBroadcastReceiver() {
         receiver = object : BroadcastReceiver() {
             override fun onReceive(p0: Context?, p1: Intent?) {
@@ -74,6 +84,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /*
+    * Function which starts dowloading the file from griven url
+    * */
     private fun initShare() {
         iconShare.setOnClickListener {
             toast("Downloading...")
@@ -87,6 +100,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /*
+    * Function which loads content in to webview
+    * */
     private fun initWebView() {
         reportLoadError = false
         loader.visibility = View.VISIBLE
@@ -98,6 +114,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onPageFinished(view: WebView, url: String) {
 
+                //handles load error
                 if (reportLoadError) {
                     loader.visibility = View.GONE
                     view.visibility = View.GONE
@@ -106,6 +123,8 @@ class MainActivity : AppCompatActivity() {
                     btnTryAgain.setOnClickListener {
                         initWebView()
                     }
+
+                    //handles successfull pdf load
                 } else {
                     view.visibility = View.VISIBLE
                     noData.visibility = View.GONE
@@ -143,6 +162,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
+// Extension funtion to show a simple toast
 fun Context.toast(msg: String) {
     Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
 }
